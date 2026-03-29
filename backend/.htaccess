@@ -1,0 +1,10 @@
+# Ativar reescrita de URLs
+RewriteEngine On
+RewriteBase /Neon_Arcade/backend/
+
+# Permitir requisições para arquivos e diretórios existentes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Redirecionar todas as requisições para index.php
+RewriteRule ^(.*)$ index.php?path=$1 [QSA,L]

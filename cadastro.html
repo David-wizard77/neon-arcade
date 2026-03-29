@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro — Neon Arcade</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="auth-page">
+
+    <div class="auth-card">
+        <div class="auth-logo">
+            <div class="auth-logo-text">Neon Arcade</div>
+            <div class="auth-logo-sub">Crie sua conta</div>
+        </div>
+
+        <form id="cadastroForm" novalidate>
+            <div class="form-group">
+                <label class="form-label" for="nome">Nome completo</label>
+                <input class="form-input" type="text" id="nome" name="nome"
+                    required autocomplete="name" placeholder="Seu nome">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="email">E-mail</label>
+                <input class="form-input" type="email" id="email" name="email"
+                    required autocomplete="email" placeholder="seu@email.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="senha">
+                    Senha <small style="font-weight:400;text-transform:none;letter-spacing:0">(mín. 6 caracteres)</small>
+                </label>
+                <input class="form-input" type="password" id="senha" name="senha"
+                    required autocomplete="new-password" minlength="6" placeholder="••••••">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="confirmar">Confirmar senha</label>
+                <input class="form-input" type="password" id="confirmar" name="confirmar"
+                    required autocomplete="new-password" placeholder="••••••">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg" id="btnSubmit">Cadastrar</button>
+        </form>
+
+        <p class="form-msg" id="msgFeedback" role="alert" aria-live="polite"></p>
+
+        <div class="auth-link">Já tem conta? <a href="login.html">Faça login</a></div>
+        <div class="auth-link" style="margin-top:8px"><a href="index.html">← Voltar para a loja</a></div>
+    </div>
+
+    <script src="assets/js/app/auth.js"></script>
+    <script src="assets/js/app/ui.js"></script>
+    <script>
+        Auth.redirectIfLoggedIn();
+
+        document.getElementById('cadastroForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const nome      = document.getElementById('nome').value.trim();
+            const email     = document.getElementById('email').value.trim();
+            const senha     = document.getElementById('senha').value;
+            const confirmar = document.getElementById('confirmar').value;
+            const btn       = document.getElementById('btnSubmit');
+
+            if (!nome || !email || !senha)  { UI.setMsg('msgFeedback', 'Preencha todos os campos.', 'erro'); return; }
+            if (/\d/.test(nome))            { UI.setMsg('msgFeedback', 'O nome não pode conter números.', 'erro'); return; }
+            if (senha.length < 6)           { UI.setMsg('msgFeedback', 'A senha deve ter no mínimo 6 caracteres.', 'erro'); return; }
+            if (senha !== confirmar)         { UI.setMsg('msgFeedback', 'As senhas não coincidem.', 'erro'); return; }
+
+            UI.setLoading(btn, true, 'Cadastrar');
+            const res = await Auth.cadastrar(nome, email, senha);
+            if (res.ok) {
+                UI.setMsg('msgFeedback', 'Cadastro realizado! Redirecionando...', 'ok');
+                setTimeout(() => location.replace('login.html'), 1500);
+            } else {
+                UI.setMsg('msgFeedback', res.msg, 'erro');
+                UI.setLoading(btn, false, 'Cadastrar');
+            }
+        });
+    </script>
+</body>
+</html>

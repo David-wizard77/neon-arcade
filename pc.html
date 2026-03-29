@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC — Neon Arcade</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-platform="pc">
+
+    <header class="topbar">
+        <a href="index.html" class="topbar-logo">Neon Arcade</a>
+        <input class="topbar-search" id="searchInput" type="search" placeholder="Buscar jogos..." autocomplete="off" aria-label="Buscar jogos">
+        <div class="topbar-spacer"></div>
+        <span id="user-nome"></span>
+        <button class="btn-cart" id="btn-cart-top">Carrinho</button>
+        <a href="login.html"    class="btn btn-secondary btn-sm" id="btn-login-nav">Entrar</a>
+        <a href="cadastro.html" class="btn btn-primary   btn-sm" id="btn-cad-nav">Cadastrar</a>
+        <button class="btn-logout" id="btn-logout" style="display:none">Sair</button>
+    </header>
+
+    <aside class="sidebar" aria-label="Navegação">
+        <span class="sidebar-section-title">Explorar</span>
+        <a href="catalogo.html">🎮 Catálogo</a>
+        <a href="ofertas.html">🔥 Ofertas</a>
+        <a href="lancamentos.html">🆕 Lançamentos</a>
+        <a href="mais-vendidos.html">⭐ Mais Vendidos</a>
+        <div class="sidebar-divider"></div>
+        <span class="sidebar-section-title">Plataformas</span>
+        <a href="pc.html" class="active">🖥️ PC</a>
+        <a href="playstation.html">🎮 PlayStation</a>
+        <a href="xbox.html">🟢 Xbox</a>
+        <a href="nintendo.html">🔴 Nintendo</a>
+    </aside>
+
+    <main class="page-layout">
+        <h1 class="page-title">🖥️ PC</h1>
+        <div id="games-container" class="games-grid">
+            <p class="estado-vazio">Carregando jogos...</p>
+        </div>
+    </main>
+
+    <div id="cart-modal" class="cart-modal hidden" role="dialog" aria-modal="true" aria-label="Carrinho">
+        <div class="cart-panel">
+            <div class="cart-header">
+                <h2>Carrinho</h2>
+                <button id="close-cart" class="cart-close" aria-label="Fechar">&times;</button>
+            </div>
+            <div class="cart-body" id="cart-items"></div>
+            <div class="cart-footer">
+                <div>
+                    <div class="cart-total-label">Total</div>
+                    <div class="cart-total-valor" id="cart-total">R$ 0,00</div>
+                </div>
+                <a href="checkout.html" class="btn btn-primary" id="checkout-btn">Finalizar Compra</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/app/auth.js"></script>
+    <script src="assets/js/app/games.js"></script>
+    <script src="assets/js/app/cart.js"></script>
+    <script src="assets/js/app/ui.js"></script>
+    <script src="assets/js/pages/plataforma.js"></script>
+</body>
+</html>

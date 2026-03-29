@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout — Neon Arcade</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <header class="topbar">
+        <a href="index.html" class="topbar-logo">Neon Arcade</a>
+        <div class="topbar-spacer"></div>
+        <span id="user-nome"></span>
+        <a href="catalogo.html" class="btn btn-ghost btn-sm">← Continuar Comprando</a>
+        <button class="btn-logout" id="btn-logout">Sair</button>
+    </header>
+
+    <aside class="sidebar" aria-label="Navegação">
+        <span class="sidebar-section-title">Explorar</span>
+        <a href="catalogo.html">🎮 Catálogo</a>
+        <a href="ofertas.html">🔥 Ofertas</a>
+        <a href="lancamentos.html">🆕 Lançamentos</a>
+        <a href="mais-vendidos.html">⭐ Mais Vendidos</a>
+        <div class="sidebar-divider"></div>
+        <span class="sidebar-section-title">Plataformas</span>
+        <a href="pc.html">🖥️ PC</a>
+        <a href="playstation.html">🎮 PlayStation</a>
+        <a href="xbox.html">🟢 Xbox</a>
+        <a href="nintendo.html">🔴 Nintendo</a>
+    </aside>
+
+    <main class="page-layout">
+        <h1 class="page-title">Meu Carrinho</h1>
+        <div class="checkout-layout">
+            <div id="checkout-lista" class="checkout-lista"></div>
+            <div id="checkout-rodape" class="checkout-rodape" style="display:none">
+                <p class="checkout-total">Total: <span id="checkout-total-valor">R$ 0,00</span></p>
+                <button class="btn btn-primary btn-lg" id="btn-finalizar">Finalizar Compra</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/app/auth.js"></script>
+    <script src="assets/js/app/cart.js"></script>
+    <script src="assets/js/app/ui.js"></script>
+    <script>
+        // Redireciona para login se não autenticado
+        Auth.requireAuth();
+
+        // Exibe nome do usuário e configura logout
+        const user = Auth.getUser();
+        if (user) document.getElementById('user-nome').textContent = `Olá, ${user.nome}`;
+        document.getElementById('btn-logout').addEventListener('click', () => Auth.logout());
+
+        function render() {
+            const items  = Cart.getItems();
+            const lista  = document.getElementById('checkout-lista');
+            const rodape = document.getElementById('checkout-rodape');
+
+            if (!items.length) {
+                lista.innerHTML = `<div class="checkout-vazio">
+                    <p>Seu carrinho está vazio.</p>
+                    <a href="catalogo.html">Ver catálogo →</a>
+                </div>`;
+                rodape.style.display = 'none';
+                return;
+            }
+
+            lista.innerHTML = items.map(item => `
+            <div class="checkout-item">
+                <img src="${UI.imgPath(item.imagem)}" alt="${UI.esc(item.nome)}">
+                <div class="checkout-item-info">
+                    <div class="checkout-item-nome">${UI.esc(item.nome)}</div>
+                    <div class="checkout-item-meta">${UI.fmt(item.preco)} × ${item.qty} = ${UI.fmt(item.preco * item.qty)}</div>
+                </div>
+                <div class="checkout-item-acoes">
+                    <button class="ci-btn" data-action="dec" data-img="${UI.esc(item.imagem)}" aria-label="Diminuir">−</button>
+                    <span class="ci-qty">${item.qty}</span>
+                    <button class="ci-btn" data-action="inc" data-img="${UI.esc(item.imagem)}" aria-label="Aumentar">+</button>
+                    <button class="ci-btn ci-btn--remove" data-action="rem" data-img="${UI.esc(item.imagem)}" aria-label="Remover">✕</button>
+                </div>
+            </div>`).join('');
+
+            lista.querySelectorAll('.ci-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const img = btn.dataset.img;
+                    if (btn.dataset.action === 'inc') Cart.increment(img);
+                    if (btn.dataset.action === 'dec') Cart.decrement(img);
+                    if (btn.dataset.action === 'rem') Cart.remove(img);
+                    render();
+                });
+            });
+
+            document.getElementById('checkout-total-valor').textContent = UI.fmt(Cart.getTotal());
+            rodape.style.display = 'flex';
+        }
+
+        document.getElementById('btn-finalizar').addEventListener('click', () => {
+            if (!Cart.getCount()) return;
+            Cart.clear();
+            render();
+            const toast = document.createElement('div');
+            toast.className = 'toast toast--ok';
+            toast.textContent = '✓ Compra finalizada! Obrigado pela preferência.';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
+        });
+
+        render();
+    </script>
+</body>
+</html>
