@@ -15,7 +15,7 @@ const Cart = (function () {
 
     function add(imagem, nome, preco) {
         if (!Auth.isLoggedIn()) {
-            location.replace('/Neon_Arcade/login.html');
+            location.replace('/login.html');
             return;
         }
         const items = _read();

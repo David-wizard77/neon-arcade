@@ -24,12 +24,12 @@ const Auth = (function () {
 
     function logout() {
         localStorage.removeItem(KEY);
-        location.replace('/Neon_Arcade/login.html');
+        location.replace('/login.html');
     }
 
     function requireAuth() {
         if (!isLoggedIn()) {
-            location.replace('/Neon_Arcade/login.html');
+            location.replace('/login.html');
             return false;
         }
         return true;
@@ -37,14 +37,14 @@ const Auth = (function () {
 
     function redirectIfLoggedIn() {
         if (isLoggedIn()) {
-            location.replace('/Neon_Arcade/index.html');
+            location.replace('/index.html');
         }
     }
 
     async function login(email, senha) {
         // Tenta API via router centralizado
         try {
-            const res = await fetch('/Neon_Arcade/backend/auth?action=login', {
+            const res = await fetch('/backend/auth?action=login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, senha }),
@@ -68,7 +68,7 @@ const Auth = (function () {
 
     async function cadastrar(nome, email, senha) {
         try {
-            const res = await fetch('/Neon_Arcade/backend/auth?action=cadastrar', {
+            const res = await fetch('/backend/auth?action=cadastrar', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nome, email, senha }),

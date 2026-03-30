@@ -16,7 +16,7 @@ const UI = (function () {
     }
 
     function imgPath(img) {
-        return img ? `/Neon_Arcade/assets/img/jogos/${img}` : '/Neon_Arcade/assets/img/jogos/placeholder.png';
+        return img ? `/assets/img/jogos/${img}` : '/assets/img/jogos/placeholder.png';
     }
 
     /* ── Card de jogo ── */
@@ -32,7 +32,7 @@ const UI = (function () {
 
         const btnCart = loggedIn
             ? `<button class="btn-add-cart" data-img="${esc(g.imagem)}" data-nome="${esc(g.nome)}" data-preco="${final}" type="button">Adicionar ao Carrinho</button>`
-            : `<a href="/Neon_Arcade/login.html" class="btn-add-cart btn-add-cart--guest">Entrar para Comprar</a>`;
+            : `<a href="/login.html" class="btn-add-cart btn-add-cart--guest">Entrar para Comprar</a>`;
 
         return `
         <article class="card-jogo">
@@ -122,7 +122,7 @@ const UI = (function () {
         if (checkout) {
             checkout.addEventListener('click', () => {
                 if (!Cart.getCount()) { alert('Seu carrinho está vazio.'); return; }
-                location.replace('/Neon_Arcade/checkout.html');
+                location.replace('/checkout.html');
             });
         }
 
